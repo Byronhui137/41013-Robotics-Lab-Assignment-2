@@ -37,8 +37,8 @@ getCyton.model.plotopt = {'nojoints', 'noname', 'noshadow','nowrist','workspace'
 getCyton.model.plot(q,'scale',scale,'fps',50);
 
 hold on
-Desk=table;
-Desk.UpdatePos(transl(0,0,-0.02));
+mount=robotBase;
+mount.UpdatePos(transl(0,0,-0.02));
 
 qCyton=[0, 0, 0, 0, 0, 0, 0];
 qPosition= transl(2,2,0);

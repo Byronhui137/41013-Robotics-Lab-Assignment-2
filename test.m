@@ -1,17 +1,17 @@
-        L1 = Link('d',0.053,'a',0,'alpha',pi/2,'offset', deg2rad(-85),'qlim',[deg2rad(-150),deg2rad(150)]);
-        L2 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
-        L3 = Link('d',0.128,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-150),deg2rad(150)]);
-        L4 = Link('d',0,'a',0.065,'alpha',-pi/2,'offset', pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
-        L5 = Link('d',0,'a',0.068,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
-        L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', -pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
-        L7 = Link('d',0.17,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
-        
-        
-        cyton = SerialLink([L1 L2 L3 L4 L5 L6 L7],'name','Left');
-        
-         workspace = [-0.4 0.4 -0.4 0.4 0 0.6];                                      % Set the size of the workspace when drawing the robot        
-scale = 0.25;        
-q = [0,0,0,0,0,0,0];     
+L1 = Link('d',0.053,'a',0,'alpha',pi/2,'offset', deg2rad(-85),'qlim',[deg2rad(-150),deg2rad(150)]);
+L2 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
+L3 = Link('d',0.128,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-150),deg2rad(150)]);
+L4 = Link('d',0,'a',0.065,'alpha',-pi/2,'offset', pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
+L5 = Link('d',0,'a',0.068,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
+L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', -pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
+L7 = Link('d',0.17,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
+
+
+cyton = SerialLink([L1 L2 L3 L4 L5 L6 L7],'name','Left');
+
+workspace = [-0.4 0.4 -0.4 0.4 0 0.6];                                      % Set the size of the workspace when drawing the robot
+scale = 0.25;
+q = [0,0,0,0,0,0,0];
 %Arm positions
 cyton.base = transl(0,0,0);
 
@@ -52,6 +52,6 @@ qMatrix= nan(steps,7);
 
 
 for i=1:steps
- qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qLocation;
- getCyton.model.animate(qMatrix(i,:));
+    qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qLocation;
+    getCyton.model.animate(qMatrix(i,:));
 end

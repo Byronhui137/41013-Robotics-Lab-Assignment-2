@@ -31,6 +31,9 @@ getCyton = Cyton;
 getCyton.GetCytonRobot();
 getCyton.PlotAndColourRobot
 
+cytonTrans=[0,0.35,0];
+getCyton.CytonLocation(transl(cytonTrans));
+
 scale =0.1;
 q = [0,0,0,0,0,0,0];           % joint config for max reach of arm joint4 at -90deg
 getCyton.model.plotopt = {'nojoints', 'noname', 'noshadow','nowrist','workspace',getCyton.workspace};
@@ -38,24 +41,28 @@ getCyton.model.plot(q,'scale',scale,'fps',50);
 
 hold on
 mount=robotBase;
-mount.UpdatePos(transl(0,0,-0.02));
+mount.UpdatePos(transl(0,0.35,-0.02));
 hold on
 Barrier=cabinateBarrier;
 Barrier.UpdatePos(transl(0,0,-0.13));
 
+cm=CoffeeMachine;
+cm.UpdatePos(transl(0,-0.1,0.11));
 
+%%
 qCyton=[0, 0, 0, 0, 0, 0, 0];
-qPosition= transl(2,2,0);
+qDelivery=[0, pi/2, 0, 0, 0, 0, 0];
+qPosition= transl(0.013,0.09302,0.3487);
 qLocation=getCyton.model.ikcon(qPosition);
-steps= 35;
+steps= 100;
 
 
 s=lspb(0,1,steps);
 qMatrix= nan(steps,7);
 
-%%
+
 
 for i=1:steps
-    qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qLocation;
+    qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qDelivery;
     getCyton.model.animate(qMatrix(i,:));
 end

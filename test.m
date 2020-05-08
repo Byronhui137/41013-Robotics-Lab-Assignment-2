@@ -39,6 +39,10 @@ getCyton.model.plot(q,'scale',scale,'fps',50);
 hold on
 mount=robotBase;
 mount.UpdatePos(transl(0,0,-0.02));
+hold on
+Barrier=cabinateBarrier;
+Barrier.UpdatePos(transl(0,0,-0.13));
+
 
 qCyton=[0, 0, 0, 0, 0, 0, 0];
 qPosition= transl(2,2,0);
@@ -49,7 +53,7 @@ steps= 35;
 s=lspb(0,1,steps);
 qMatrix= nan(steps,7);
 
-
+%%
 
 for i=1:steps
     qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qLocation;

@@ -1,8 +1,9 @@
 classdef Cyton < handle
     properties
         model;  
-        workspace = [-0.4 0.4 -0.4 0.4 -0.2 0.6];  
-%         workspace = [-2 2 -2 2 -2 2];  
+%          workspace = [-0.4 0.4 -0.4 0.4 -0.2 0.6];  
+%          workspace = [-200 200 -200 200 -200 200];  
+        workspace = [-2 2 -2 2 -2 2];  
         %> If we have a tool model which will replace the final links model, combined ply file of the tool model and the final link models
         toolModelFilename = []; % Available are: 'DabPrintNozzleTool.ply';        
         toolParametersFilename = []; % Available are: 'DabPrintNozzleToolParameters.mat'; 

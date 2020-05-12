@@ -26,7 +26,16 @@ classdef Cyton < handle
             L4 = Link('d',0,'a',0.065,'alpha',-pi/2,'offset', pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
             L5 = Link('d',0,'a',0.068,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
             L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', -pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
-            L7 = Link('d',0.17,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
+            L7 = Link('d',0.140,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
+            
+            
+%             L1 = Link('d',0.052,'a',0,'alpha',pi/2,'offset', deg2rad(-85),'qlim',[deg2rad(-150),deg2rad(150)]);
+%             L2 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
+%             L3 = Link('d',0.14080,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-150),deg2rad(150)]);
+%             L4 = Link('d',0,'a',0.07180,'alpha',-pi/2,'offset', pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
+%             L5 = Link('d',0,'a',0.07180,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);
+%             L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', -pi/2,'qlim',[deg2rad(-105),deg2rad(105)]);
+%             L7 = Link('d',0.151,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
             
             %         L1 = Link('d',0.053,'a',0,'alpha',pi/2,'offset', deg2rad(-85),'qlim',[deg2rad(-150),deg2rad(150)]);
             %         L2 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-105),deg2rad(105)]);

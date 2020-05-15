@@ -19,7 +19,7 @@ classdef CoffeeMachine < handle
             self.pose = eye(4);
             
             vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
-            mesh = trisurf(f, verts(:,1), verts(:, 2), verts(:, 3)...
+            mesh = trisurf(f, self.verts(:,1)+0, self.verts(:, 2)+-0.1, self.verts(:, 3)+0.11...
                 ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
             hold on
         end

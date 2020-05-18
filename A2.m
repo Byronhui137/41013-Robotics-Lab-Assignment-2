@@ -1,4 +1,4 @@
-%% hello
+
 L1 = Link('d',(0.1564 + 0.1284) ,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-360),deg2rad(360)]);
 L2 = Link('d', (0.0054 + 0.0064) ,'a',0,'alpha',-pi/2,'offset', 0.0054,'qlim',[deg2rad(-128.9),deg2rad(128.9)]);
 L3 = Link('d', (0.2104 + 0.2104) ,'a',0,'alpha',-pi/2,'offset', 0.0064,'qlim',[deg2rad(0),deg2rad(0)]);
@@ -10,9 +10,12 @@ L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2ra
 
 cyton = SerialLink([L1 L2 L3 L4 L5 L6 L7],'name','Left');
 
+
 workspace = [-1.5 1.5 -1.5 1.5 -1.5 1.5];                                      % Set the size of the workspace when drawing the robot
 scale = 0.25;
 q = [0,0,0,0,0,0,0];
+
+
 %Arm positions
 cyton.base = transl(0,0,0);
 
@@ -25,12 +28,12 @@ cyton.teach;
 hold on;
 
 %%
-set(0,'DefaultFigureWindowStyle','docked')
+
 clf
 getKinova = Kinova;
 getKinova.GetKinovaRobot();
 getKinova.PlotAndColourRobot;
-getKinova.KinovaLocation(transl(0,0.45,-0.02));
+getKinova.KinovaLocation(transl(0,0.45,-0.1));
 
 % cytonTrans=[0,0.45,0];
 % getCyton.CytonLocation(transl(cytonTrans));
@@ -42,30 +45,38 @@ getKinova.model.plot(q,'scale',scale,'fps',50);
 
 
 hold on
-mount=robotBase;
-mount.UpdatePos(transl(0,0.45,-0.02));
+% mount=robotBase;
+% mount.UpdatePos(transl(0,0.45,-0.02));
 
 
 hold on
 Barrier=cabinateBarrier;
-Barrier.UpdatePos(transl(0,0,-0.13));
+Barrier.UpdatePos(transl(0,0,0.20));
 
 cup1=Cup;
-cup1.UpdatePos(transl(0,0.779359914877542,-0.01));
+cup1.UpdatePos(transl(0,-0.779359914877542,-0.045));
 
 cm=CoffeeMachine;
+cm.UpdatePos(trotz(pi/2));
 
 stackCups=NineCup;
-stackCups.UpdatePos(transl(-0.5,0.5,-0.045));
+stackCups.UpdatePos(transl(-0.5,-0.5,-0.045));
 
 %Light Curtains
-x1=1.189;
-for i=1:15
-    plot3([x1 x1],[1.44 1.44],[1.377 -1.623],'Color','c')
-    plot3([x1 x1],[-1.56 -1.56],[1.377 -1.623],'Color','c')
+x1=1.334;
+y1=1.279;
+for i=1:14
+    plot3([x1 x1],[1.279 1.279],[1.241 -0.05866],'Color','c');
+    plot3([x1 x1],[-1.221 -1.221],[1.241 -0.05866],'Color','c');
     x1=x1-0.2;
-end
     
+end
+for i=1:13
+    plot3([-1.286 -1.286],[y1 y1],[1.241 -0.05866],'Color','c');
+    plot3([1.334 1.334],[y1 y1],[1.241 -0.05866],'Color','c');
+    y1=y1-0.2;
+end
+
 %%
 qCyton=[0, 0, 0, 0, 0, 0, 0];
 qDelivery=[0, pi/2, 0, pi/2, 0, pi/2,pi];
@@ -83,4 +94,8 @@ for i=1:steps
     qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qDelivery;
     getKinova.model.animate(qMatrix(i,:));
 end
- cytoneff=getKinova.model.fkine(qMatrix(i,:));
+cytoneff=getKinova.model.fkine(qMatrix(i,:));
+
+%%
+hold on
+environment=Environment();

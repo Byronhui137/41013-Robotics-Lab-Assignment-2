@@ -11,11 +11,11 @@ classdef Kinova < handle
     end
     
     methods
-        %         function self = Cyton()
-        %         self.GetCytonRobot();
-        %         self.model.base = transl(0,0,0.1);
-        %         self.PlotAndColourRobot();
-        %         end
+                 function self = Kinova()
+                 self.GetKinovaRobot();
+                 self.model.base = transl(0,0,-0.25);
+                 self.PlotAndColourRobot();
+                 end
         %% GetCytonRobot
         function GetKinovaRobot(self)
             pause(0.001);

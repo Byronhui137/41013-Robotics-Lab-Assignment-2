@@ -43,7 +43,7 @@ q = [0,0,0,0,0,0,0];           % joint config for max reach of arm joint4 at -90
 getKinova.model.plotopt = {'nojoints', 'noname', 'noshadow','nowrist','workspace',getKinova.workspace};
 getKinova.model.plot(q,'scale',scale,'fps',50);
 
-
+%%
 hold on
 % mount=robotBase;
 % mount.UpdatePos(transl(0,0.45,-0.02));
@@ -98,4 +98,7 @@ cytoneff=getKinova.model.fkine(qMatrix(i,:));
 
 %%
 hold on
+camlight
 environment=Environment();
+%%
+

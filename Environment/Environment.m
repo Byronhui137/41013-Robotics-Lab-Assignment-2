@@ -24,7 +24,7 @@ classdef Environment
                 mid_point = sum(v)/v_count;
                 verts = v - repmat(mid_point, v_count, 1);
                 vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
-                mesh = trisurf(f, verts(:,1), verts(:, 2), verts(:, 3)...
+                mesh = trisurf(f, verts(:,1), verts(:, 2)-1, verts(:, 3)-0.2...
                     ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
                 
             end
@@ -36,7 +36,7 @@ classdef Environment
                 mid_point = sum(v)/v_count;
                 verts = v - repmat(mid_point,v_count, 1);
                 vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
-                mesh = trisurf(f, verts(:,1), verts(:, 2), verts(:, 3)...
+                mesh = trisurf(f, verts(:,1), verts(:, 2)+0.8, verts(:, 3)-0.1...
                     ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
             end
             %%
@@ -47,7 +47,7 @@ classdef Environment
                 mid_point = sum(v)/v_count;
                 verts = v - repmat(mid_point,v_count, 1);
                 vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
-                mesh = trisurf(f, verts(:,1), verts(:, 2), verts(:, 3)...
+                mesh = trisurf(f, verts(:,1)+0.75, verts(:, 2), verts(:, 3)-0.25...
                     ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
             end
             %%

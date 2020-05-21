@@ -22,7 +22,7 @@ function varargout = CoffeeMaking_GUI(varargin)
 
 % Edit the above text to modify the response to help CoffeeMaking_GUI
 
-% Last Modified by GUIDE v2.5 18-May-2020 14:24:55
+% Last Modified by GUIDE v2.5 19-May-2020 17:18:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,6 +52,7 @@ function CoffeeMaking_GUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to CoffeeMaking_GUI (see VARARGIN)
 handles.environment=Environment();
+handles.kinova=Kinova();
 
 camlight;
 % set(findall(hObject, '-property','Units'),'Units','Normalized')
@@ -75,22 +76,43 @@ function varargout = CoffeeMaking_GUI_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in start_Simulation.
+function start_Simulation_Callback(hObject, eventdata, handles)
+% hObject    handle to start_Simulation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in pushbutton4.
-function pushbutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4 (see GCBO)
+% --- Executes on button press in robot_collision.
+function robot_collision_Callback(hObject, eventdata, handles)
+% hObject    handle to robot_collision (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in pushbutton5.
-function pushbutton5_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton5 (see GCBO)
+% --- Executes on button press in estop_Btn.
+function estop_Btn_Callback(hObject, eventdata, handles)
+% hObject    handle to estop_Btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in outside_collision.
+function outside_collision_Callback(hObject, eventdata, handles)
+% hObject    handle to outside_collision (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in exit_Btn.
+function exit_Btn_Callback(hObject, eventdata, handles)
+% hObject    handle to exit_Btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on mouse press over figure background.
+function figure1_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

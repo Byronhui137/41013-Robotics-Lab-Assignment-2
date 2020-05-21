@@ -22,7 +22,7 @@ function varargout = Start_GUI(varargin)
 
 % Edit the above text to modify the response to help Start_GUI
 
-% Last Modified by GUIDE v2.5 18-May-2020 14:20:25
+% Last Modified by GUIDE v2.5 18-May-2020 20:54:22
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,5 +78,20 @@ function make_coffee_Callback(hObject, eventdata, handles)
 % hObject    handle to make_coffee (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-CoffeeMaking_GUI
+CoffeeMaking_GUIv1
+close Start_GUI
+
+
+% --- Executes on button press in teach_button.
+function teach_button_Callback(hObject, eventdata, handles)
+% hObject    handle to teach_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in exit_button.
+function exit_button_Callback(hObject, eventdata, handles)
+% hObject    handle to exit_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 close Start_GUI

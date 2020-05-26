@@ -8,6 +8,11 @@ classdef Kinova < handle
         %> If we have a tool model which will replace the final links model, combined ply file of the tool model and the final link models
         toolModelFilename = []; % Available are: 'DabPrintNozzleTool.ply';
         toolParametersFilename = []; % Available are: 'DabPrintNozzleToolParameters.mat';
+        cup
+        vCount
+        verts
+        mesh
+        qMatrix
     end
     
     methods
@@ -20,16 +25,14 @@ classdef Kinova < handle
         function GetKinovaRobot(self)
             pause(0.001);
             name = ['Kinova_',datestr(now,'yyyymmddTHHMMSSFFF')];
-            
 
-L1 = Link('d',(0.1564 + 0.1284) ,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-360),deg2rad(360)]);
-L2 = Link('d', (0.0054 + 0.0064) ,'a',0,'alpha',-pi/2,'offset', 0.0054,'qlim',[deg2rad(-128.9),deg2rad(128.9)]);
-L3 = Link('d', (0.2104 + 0.2104) ,'a',0,'alpha',-pi/2,'offset', 0.0064,'qlim',[deg2rad(-360),deg2rad(360)]);
-L4 = Link('d', (0.0064 + 0.0064) ,'a',0,'alpha',pi/2,'offset',0.0064,'qlim',[deg2rad(-147.8),deg2rad(147.8)]);
-L5 = Link('d', (0.2084 + 0.1059),'a',0,'alpha',pi/2,'offset', 0.0064,'qlim',[deg2rad(-360),deg2rad(360)]);
-L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-120.3),deg2rad(120.3)]);
-L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-360),deg2rad(360)]);
-
+            L1 = Link('d',(0.1564 + 0.1284) ,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-360),deg2rad(360)]);
+            L2 = Link('d', (0.0054 + 0.0064) ,'a',0,'alpha',-pi/2,'offset', 0.0054,'qlim',[deg2rad(-128.9),deg2rad(128.9)]);
+            L3 = Link('d', (0.2104 + 0.2104) ,'a',0,'alpha',-pi/2,'offset', 0.0064,'qlim',[deg2rad(-360),deg2rad(360)]);
+            L4 = Link('d', (0.0064 + 0.0064) ,'a',0,'alpha',pi/2,'offset',0.0064,'qlim',[deg2rad(-147.8),deg2rad(147.8)]);
+            L5 = Link('d', (0.2084 + 0.1059),'a',0,'alpha',pi/2,'offset', 0.0064,'qlim',[deg2rad(-360),deg2rad(360)]);
+            L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-120.3),deg2rad(120.3)]);
+            L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-360),deg2rad(360)]);
 
             self.model = SerialLink([L1 L2 L3 L4 L5 L6 L7],'name',name);
             %         self.model.base = transl(0,0,-0.07);
@@ -67,11 +70,13 @@ L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2ra
             end
         end
         
+        %%
         function KinovaLocation(self,transform)
             self.model.base = transform;
         end
-    
-        function Move(self, qStart, qEnd, steps)
+        
+        %%
+        function Move(self, qStart, qEnd, steps, objectUpdateOption)
             % This function uses the trapezoidal method for trajectory
             % generation, which is more efficient than the quintic method.
             
@@ -80,27 +85,69 @@ L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2ra
             s = lspb(0,1,steps);   
             
             % Create memory allocation for joint state matrix variables
-            qMatrix = nan(steps,7);
+            self.qMatrix = nan(steps,7);
             
             % Generate interpolated joint angles
             for i = 1:steps
-                qMatrix(i,:) = (1 - s(i)) * qStart + s(i) * qEnd;   
+                self.qMatrix(i,:) = (1 - s(i)) * qStart + s(i) * qEnd;   
             end
 
 %             qMatrix = jtraj(qStart, qEnd, steps);
 
             % Animate the trajectory movements of both end effectors
             for i = 1:1:steps
-                self.model.animate(qMatrix(i,:));
-                                
-                % Transformations of both left and right end effectors
+                self.model.animate(self.qMatrix(i,:));
+                
+                
+                % Depending on the required action for an object, the end
+                % effector of the object will be moved/updated
+                % i.e.  case 0  : no parts move
+                %       case 1  : move coffee cup
+                %       case 2  : replace empty coffee cup with filled
+                %                 coffee cup
+                
+                switch objectUpdateOption
+                    case 0
+                        % do nothing
+                    case 1
+                        % move cup with xyzrpy offsets
+                        self.UpdateObject(i,-0.02,0,0.1,0,-pi/2,0);
+                    case 2
+                        % replace empty cup with filled
+                        % write code to get base location of current empty
+                        % cup, delete empty cup, insert filled cup using
+                        % saved base location
+                end
+                
+                
+                % Transformations of end effectors
                 % calculated at each step
-                t = self.model.fkine(qMatrix(i,:));
+                t = self.model.fkine(self.qMatrix(i,:));
                 
                 drawnow();
             end
             
         end
+        %%
+        function GetObject(self, object)
+            % This function is used to get the cup model from the
+            % environment class
+            self.cup = object;
+        end 
         
+        function UpdateObject(self, i, xOffset, yOffset, zOffset, rollOffset, pitchOffset, yawOffset)           
+            endEffector = self.model.fkine(self.qMatrix(i,:)) * ...
+                          transl(xOffset,yOffset,zOffset) * ...
+                          trotx(rollOffset) * ...
+                          troty(pitchOffset) * ...
+                          trotz(yawOffset);
+            updatedPoints = (endEffector * [self.cup.verts,ones(self.cup.vCount,1)]')';
+            self.cup.mesh.Vertices = updatedPoints(:,1:3);
+            
+        end
+            
     end
+        
+        %%
+        
 end

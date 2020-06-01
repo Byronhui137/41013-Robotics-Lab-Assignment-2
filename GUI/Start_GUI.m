@@ -78,7 +78,7 @@ function make_coffee_Callback(hObject, eventdata, handles)
 % hObject    handle to make_coffee (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-CoffeeMaking_GUIv1
+CoffeeMaking_GUI
 close Start_GUI
 
 

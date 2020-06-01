@@ -1,11 +1,36 @@
+%% Final
 % Create environment
 clear all
 clc
 clf
-
+camlight
 enviro=Environment();
 kinova=Kinova();
-kinova.GetObject(enviro.cup);
+kinova.GetCup(enviro.cup);
+
+pause();
+qStart = [0,0,0,pi/2,0,pi/2,pi];
+trCup = transl(0.6,0,-0.2) * trotx(-pi) * troty(deg2rad(80)) * trotz(-pi);
+trCoffeeMachine = transl(-0.115,0.68,-0.2) * trotx(1.5*pi) * troty(-2*pi) * trotz(-1.5*pi);
+
+qCup = kinova.model.ikcon(trCup);
+qCoffeeMachine = kinova.model.ikcon(trCoffeeMachine);
+qDropOff = qCoffeeMachine + [deg2rad(180) 0 0 0 0 0 0];
+
+% Make Coffee
+kinova.Move(qStart,qCup,60,0);        
+kinova.Move(qCup,qCoffeeMachine,60,1);    
+kinova.Move(qCoffeeMachine,qDropOff,60,2);   
+
+%% Testing
+% Create environment
+clear all
+clc
+clf
+camlight
+enviro=Environment();
+kinova=Kinova();
+kinova.GetCup(enviro.cup);
 
 % q=[0,0,0,0,0,0,0];
 % scale=0.1;
@@ -13,34 +38,53 @@ kinova.GetObject(enviro.cup);
 % kinova.model.plot(q,'scale',scale,'fps',50);
 
 %%
+xOffset = kinova.endEffector(1,4);
+yOffset = kinova.endEffector(2,4);
+zOffset = kinova.endEffector(3,4);
+delete(kinova.cup.mesh);
+% enviro=Environment();
+%cupWCoffee=Eniroment();
+% enviro.CupWCoffee();
+enviro.GetCupWCoffee();
+
+%%
+clc;
+xOffset = kinova.endEffector(1,4);
+yOffset = kinova.endEffector(2,4);
+zOffset = kinova.endEffector(3,4);
+delete(kinova.cup.mesh);
+cupWCoffee=enviro.CupWCoffee(xOffset,yOffset,zOffset);
+kinova.GetCupWCoffee(cupWCoffee);
+
+%%
+kinova.GetCupWCoffee(enviro.cupWCoffee);
+
+%%
 % Standard Kinova Poses
 qStart = [0,0,0,pi/2,0,pi/2,pi];
 
 trCup = transl(0.6,0,-0.2) * trotx(-pi) * troty(deg2rad(80)) * trotz(-pi);
-% trCoffeeMachine = transl(-0.1,0.7,-0.18) * trotx(-pi/2) * troty(1.5*pi) * trotz(-pi/2);
-% trCoffeeMachine = transl(-0.08,0.7,-0.18) * trotx(-pi/2) * troty(0) * trotz(pi/2);
-% trCoffeeMachine = transl(0.05,0.2,0) * trotx(1.5*pi) * troty(-2*pi) * trotz(-1.5*pi);
-
 trCoffeeMachine = transl(-0.115,0.68,-0.2) * trotx(1.5*pi) * troty(-2*pi) * trotz(-1.5*pi);
-
-
-% trDropOff = transl(0,-1,-0.18) * trotx(-pi/2) * troty(pi) * trotz(pi/2);
-% trDropOff = transl(0,-1,-0.18) * trotx(-pi/2) * troty(0) * trotz(pi/2);
-% trDropOff = transl(0,-0.8,-0.18) * trotx(1.5*pi) * troty(pi) * trotz(1.5*pi);
-trDropOff = transl(0,-0.8,-0.18) * trotx(1.5*pi) * troty(-2*pi) * trotz(1.5*pi);
+% trDropOff = transl(0,-0.8,-0.18) * trotx(1.5*pi) * troty(-2*pi) * trotz(1.5*pi);
+% trDropOff = transl(0,-0.8,-0.18) * trotx(-1.5*pi) * troty(pi/2) * trotz(-pi/2);
+% trDropOff = transl(-0.3,0.5,0.1) * trotx(pi) * troty(2) * trotz(0);
+% trDropOff = transl(0,-0.8,-0.18) * trotx(pi/2) * trotz(-pi/2);
 
 qCup = kinova.model.ikcon(trCup);
 qCoffeeMachine = kinova.model.ikcon(trCoffeeMachine);
-qDropOff = kinova.model.ikcon(trDropOff);
+% qDropOff = kinova.model.ikcon(trDropOff);
+qDropOff = qCoffeeMachine + [deg2rad(180) 0 0 0 0 0 0];
 
 % Make Coffee
 % kinova.Move(qStart,qCup,60,0);        %%
-kinova.Move(qCup,qCoffeeMachine,60,1);      %%      
-% kinova.Move(qCoffeeMachine,qDropOff,60,1;     %%
+% kinova.Move(qCup,qCoffeeMachine,60,1);      %%      
+kinova.Move(qCoffeeMachine,qDropOff,60,2);     %%
+
+% kinova.Move(qCoffeeMachine,qDropOff,30,1);     %%
 
 % % for testing
 % kinova.Move(qCoffeeMachine,qCoffeeMachine,2,1); 
-% kinova.Move(qDropOff,qDropOff,2);
+% kinova.Move(qDropOff,qDropOff,2,2);
 
 % trCoffeeMachine2 = transl(0.7,0,-0.1) ;
 % qCoffeeMachine2 = kinova.model.ikcon(trCoffeeMachine2);
@@ -49,6 +93,8 @@ kinova.Move(qCup,qCoffeeMachine,60,1);      %%
 
 kinova.model.teach;
 
+% -90 / 0 / 90 // -63 === +180
+% 90 / 0 / -90 // 109 
 
 %%
 

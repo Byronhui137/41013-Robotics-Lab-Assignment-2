@@ -1,47 +1,53 @@
 
+% L1 = Link('d',(0.1564 + 0.1284) ,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-360),deg2rad(360)]);
+% L2 = Link('d', (0.0054 + 0.0064) ,'a',0,'alpha',-pi/2,'offset', 0.0054,'qlim',[deg2rad(-128.9),deg2rad(128.9)]);
+% L3 = Link('d', (0.2104 + 0.2104) ,'a',0,'alpha',-pi/2,'offset', 0.0064,'qlim',[deg2rad(0),deg2rad(0)]);
+% L4 = Link('d', (0.0064 + 0.0064) ,'a',0,'alpha',pi/2,'offset',0.0064,'qlim',[deg2rad(-147.8),deg2rad(147.8)]);
+% L5 = Link('d', (0.2084 + 0.1059),'a',0,'alpha',pi/2,'offset', 0.0064,'qlim',0);
+% L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-120.3),deg2rad(120.3)]);
+% L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
+
 L1 = Link('d',(0.1564 + 0.1284) ,'a',0,'alpha',pi/2,'offset', 0,'qlim',[deg2rad(-360),deg2rad(360)]);
 L2 = Link('d', (0.0054 + 0.0064) ,'a',0,'alpha',-pi/2,'offset', 0.0054,'qlim',[deg2rad(-128.9),deg2rad(128.9)]);
-L3 = Link('d', (0.2104 + 0.2104) ,'a',0,'alpha',-pi/2,'offset', 0.0064,'qlim',[deg2rad(0),deg2rad(0)]);
+L3 = Link('d', (0.2104 + 0.2104) ,'a',0,'alpha',-pi/2,'offset', 0.0064,'qlim',[deg2rad(-360),deg2rad(360)]);
 L4 = Link('d', (0.0064 + 0.0064) ,'a',0,'alpha',pi/2,'offset',0.0064,'qlim',[deg2rad(-147.8),deg2rad(147.8)]);
-L5 = Link('d', (0.2084 + 0.1059),'a',0,'alpha',pi/2,'offset', 0.0064,'qlim',0);
+L5 = Link('d', (0.2084 + 0.1059),'a',0,'alpha',pi/2,'offset', 0.0064,'qlim',[deg2rad(-360),deg2rad(360)]);
 L6 = Link('d',0,'a',0,'alpha',-pi/2,'offset', 0,'qlim',[deg2rad(-120.3),deg2rad(120.3)]);
-L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-150),deg2rad(150)]);
+L7 = Link('d', (0.1059 + 0.0615) ,'a',0,'alpha',0,'offset', -pi/2,'qlim',[deg2rad(-360),deg2rad(360)]);
 
-
-cyton = SerialLink([L1 L2 L3 L4 L5 L6 L7],'name','Left');
+Kinova = SerialLink([ L1 L2 L3 L4 L5 L6 L7],'name','Kinova');
 
 
 workspace = [-1.5 1.5 -1.5 1.5 -1.5 1.5];                                      % Set the size of the workspace when drawing the robot
 scale = 0.25;
 q = [0,0,0,0,0,0,0];
+q2=[0,0,pi/2,0,0,0,0];
 
 
 %Arm positions
-cyton.base = transl(0,0,0);
-
+Kinova.base = transl(0,0,0);
 
 %plot arm on graph
 clf
-cyton.plot(q,'workspace',workspace,'scale',scale,'trail','g.','fps',50);
-cyton.teach;
+Kinova.plot(q,'workspace',workspace,'scale',scale,'trail','g.','fps',50);
+Kinova.teach;
 
 hold on;
 
 %%
-
 clf
-getKinova = Kinova;
-getKinova.GetKinovaRobot();
+getKinova = Kinova();
 getKinova.PlotAndColourRobot;
 getKinova.KinovaLocation(transl(0,0.45,-0.1));
 
 % cytonTrans=[0,0.45,0];
 % getCyton.CytonLocation(transl(cytonTrans));
-
+hold on
 scale =0;
+
 q = [0,0,0,0,0,0,0];           % joint config for max reach of arm joint4 at -90deg
-getKinova.model.plotopt = {'nojoints', 'noname', 'noshadow','nowrist','workspace',getKinova.workspace};
-getKinova.model.plot(q,'scale',scale,'fps',50);
+
+
 
 %%
 hold on
@@ -78,15 +84,14 @@ for i=1:13
 end
 
 %%
-qCyton=[0, 0, 0, 0, 0, 0, 0];
-qDelivery=[0, pi/2, 0, pi/2, 0, pi/2,pi];
-qPosition= transl(-0.05,1.1,-0.1);
+qCyton=[0, 0, 0, 0, 0, 0, 0, 0];
+qDelivery=[0,pi/2,pi/2, pi/2, pi/2, pi/2,pi/2,pi/2];
+qPosition= transl(-0.05,1.2,-0.1);
 qLocation=getKinova.model.ikcon(qPosition);
+
 steps= 100;
-
-
 s=lspb(0,1,steps);
-qMatrix= nan(steps,7);
+qMatrix= nan(steps,8);
 
 
 
@@ -94,11 +99,16 @@ for i=1:steps
     qMatrix(i,:)=(1-s(i))*qCyton + s(i)*qDelivery;
     getKinova.model.animate(qMatrix(i,:));
 end
-cytoneff=getKinova.model.fkine(qMatrix(i,:));
 
 %%
 hold on
 camlight
-environment=Environment();
-%%
+kinova=Assignment2Functions;
+kinova.HumanHand;
+axis equal;
 
+
+%%
+kinova=Assignment2Functions;
+kinova.HumanHand();
+camlight;

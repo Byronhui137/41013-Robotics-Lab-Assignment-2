@@ -109,6 +109,6 @@ axis equal;
 
 
 %%
-kinova=Assignment2Functions;
-kinova.HumanHand();
+a2=Assignment2Functions;
+a2.HumanHand();
 camlight;

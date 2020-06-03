@@ -1,3 +1,35 @@
+%% FinalFINAL
+clear all
+clc
+clf
+camlight;
+a2=Assignment2FunctionsVideo();
+a2.Simulation();
+
+
+
+%% Assignment2Functions
+clear all
+clc
+clf
+camlight;
+a2=Assignment2Functions();
+
+pause();
+
+qStart = [0,0,0,pi/2,0,pi/2,pi];
+trCup = transl(0.6,0,-0.2) * trotx(-pi) * troty(deg2rad(80)) * trotz(-pi);
+trCoffeeMachine = transl(-0.115,0.68,-0.2) * trotx(1.5*pi) * troty(-2*pi) * trotz(-1.5*pi);
+
+qCup = a2.kinova.model.ikcon(trCup);
+qCoffeeMachine = a2.kinova.model.ikcon(trCoffeeMachine);
+qDropOff = qCoffeeMachine + [deg2rad(180) 0 0 0 0 0 0];
+
+% Make Coffee
+a2.Move(qStart,qCup,60,0);        
+a2.Move(qCup,qCoffeeMachine,60,1);    
+a2.Move(qCoffeeMachine,qDropOff,60,2);  
+
 %% Final
 % Create environment
 clear all

@@ -8,7 +8,7 @@ classdef Environment
         nineCups
         cabinate
         cupWCoffee
-        lightcurtains
+        dropOff
         humanhand
     end
     
@@ -19,7 +19,8 @@ classdef Environment
             self.coffeeMachine=self.CoffeeMachine();
             self.nineCups=self.NineCups();
             self.cabinate=self.Cabinate();
-            self.lightcurtains=self.LightCurtains();
+            self.dropOff = self.DropOff();
+          
             
             
         end
@@ -97,27 +98,17 @@ classdef Environment
 %             cupWCoffee.mesh = trisurf(f, cupWCoffee.verts(:, 1)+xOffset, cupWCoffee.verts(:, 2)+yOffset, cupWCoffee.verts(:, 3)+zOffset...
 %                 ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
 %             
-%         end
-        
-       
-        
-        
+%         end              
         %%
-        function lightcurtains=LightCurtains(self)
-            lightcurtains.x1=1.334;
-            lightcurtains.y1=1.279;
-            for i=1:14
-                plot3([lightcurtains.x1 lightcurtains.x1],[1.279 1.279],[1.041 -0.2587],'Color','c');
-                plot3([lightcurtains.x1 lightcurtains.x1],[-1.221 -1.221],[1.041 -0.2587],'Color','c');
-                lightcurtains.x1=lightcurtains.x1-0.2;
-                
-            end
-            for i=1:13
-                plot3([-1.286 -1.286],[lightcurtains.y1 lightcurtains.y1],[1.041 -0.2587],'Color','c');
-                plot3([1.334 1.334],[lightcurtains.y1 lightcurtains.y1],[1.041 -0.2587],'Color','c');
-                lightcurtains.y1=lightcurtains.y1-0.2;
-            end
+        function dropOff = DropOff(self)
+            [f, v, data] = plyread('dropoff.ply','tri');
             
+            dropOff.vCount = size(v,1);
+            midPoint = sum(v)/dropOff.vCount;
+            dropOff.verts = v - repmat(midPoint,dropOff.vCount, 1);
+            vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
+            dropOff.mesh = trisurf(f, dropOff.verts(:,1)+0.17, dropOff.verts(:, 2)-0.9, dropOff.verts(:, 3)-0.25...
+                ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
         end
         
         %%

@@ -470,7 +470,7 @@ function xValue_Callback(hObject, eventdata, handles)
 xValue=str2num(get(hObject,'String'));
 minxReach=-1.3;
 maxxReach=1.3;
-if isempty(xValue) % if users forgot to input a number then error pops us 
+if isempty(xValue) % if users forgot to input a m
     errordlg('Missing X value', 'Run Error');
     set(hObject,'String',0.0);
 elseif xValue<minxReach || xValue > maxxReach

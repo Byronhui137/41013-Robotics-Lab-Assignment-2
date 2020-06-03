@@ -77,10 +77,11 @@ varargout{1} = handles.output;
 
 
 % --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
+function makeCoffee_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles.kinova.Simulation();
 
 
 % --- Executes on button press in robotCollision_btn.
@@ -102,7 +103,10 @@ function eStop_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to eStop_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+handles.kinova.estopTrigger=get(hObject,'Value');
+if handles.kinova.estopTrigger==1 % button pressed
+    errordlg('Emergency Stop Activated', 'Emergency');
+end 
 
 % --- Executes on button press in exit_Btn.
 function exit_Btn_Callback(hObject, eventdata, handles)
@@ -123,7 +127,7 @@ function handSlider_Callback(hObject, eventdata, handles)
 handles.kinova.handlocation(1,4)=get(hObject,'Value'); %get pos from the slider
 updatePoints=[handles.kinova.handlocation*[handles.kinova.handVerts,ones(handles.kinova.handvCount,1)]']'; %update the verteies and faces
 handles.kinova.handMesh_h.Vertices=updatePoints(:,1:3); %move the hand 
-
+handles.kinova.handCollisionTrigger = 1;
 % --- Executes during object creation, after setting all properties.
 function handSlider_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to handSlider (see GCBO)

@@ -15,7 +15,8 @@ classdef Kinova < handle
         verts
         mesh
         qMatrix
-        endEffector
+        endEffector;
+        
     end
     
     methods
@@ -23,8 +24,9 @@ classdef Kinova < handle
              self.GetKinovaRobot();
              self.model.base = transl(0,0,-0.27);
              self.PlotAndColourRobot();
+             
          end
-        %% GetCytonRobot
+        %% GetKinova
         function GetKinovaRobot(self)
             pause(0.001);
             name = ['Kinova_',datestr(now,'yyyymmddTHHMMSSFFF')];
@@ -77,17 +79,6 @@ classdef Kinova < handle
         function KinovaLocation(self,transform)
             self.model.base = transform;
         end
-        
-        %%
-        function testDeleteObject(self)
-            xOffset = self.endEffector(1,4);
-            yOffset = self.endEffector(2,4);
-            zOffset = self.endEffector(3,4);
-            delete(self.cup.mesh);
-            enviro=Environment();
-            cupWCoffee=enviro.CupWCoffee(xOffset,yOffset,zOffset);
-        end
-        
         %%
         function Move(self, qStart, qEnd, steps, objectUpdateOption)
             % This function uses the trapezoidal method for trajectory

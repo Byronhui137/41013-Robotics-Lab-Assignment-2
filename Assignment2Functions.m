@@ -57,7 +57,7 @@ classdef Assignment2Functions <handle
             %Some triggers used to stop simulation
             self.handCollisionTrigger = 1;  
             self.estopTrigger=0;
-            self.robotcollisionTrigger=0
+            self.robotcollisionTrigger=0;
             
             
             
@@ -156,9 +156,7 @@ classdef Assignment2Functions <handle
             end
             
         end
-        
-        %%
-        
+                
         
         %%
         function Move(self, qStart, qEnd, steps, objectUpdateOption)
@@ -187,12 +185,12 @@ classdef Assignment2Functions <handle
             % Generate interpolated joint angles
             for i = 1:steps
                 self.qMatrix(i,:) = (1 - s(i)) * qStart + s(i) * qEnd;
-            end
+%             end
             
             %             qMatrix = jtraj(qStart, qEnd, steps);
             
             % Animate the trajectory movements of both end effectors
-            for i = 1:1:steps
+%             for i = 1:1:steps
                 %when the Emergency Button is pressed, Trigger is ==1 then
                 %pause the simulation
                 
@@ -229,6 +227,46 @@ classdef Assignment2Functions <handle
             
         end
         
+        %%
+        function Move2(self, trEnd, qGuess, steps, objectUpdateOption)
+            if objectUpdateOption == 2
+                xOffset = self.kinova.endEffector(1,4);
+                yOffset = self.kinova.endEffector(2,4);
+                zOffset = self.kinova.endEffector(3,4);
+                delete(self.enviro.cup.mesh);
+                self.enviro.cupWCoffee=self.enviro.CupWCoffee(xOffset,yOffset,zOffset);
+                pause(3);
+            end
+            
+            s = lspb(0,1,steps);                % Trapezoidal trajectory scalar
+            self.qMatrix = zeros(steps,7);  % Array for joint anglesR  
+            
+            qStart = self.kinova.model.getpos();
+            
+%             if (objectUpdateOption == 0 || objectUpdateOption == 1)
+                qEnd = self.kinova.model.ikcon(trEnd,qGuess);
+%             elseif (objectUpdateOption == 2 || objectUpdateOption == 3)
+%                 qEnd = trEnd;
+%             end
+            
+            for i = 1:steps
+                if self.estopTrigger==1
+                    pause();
+                end
+                self.qMatrix(i,:) = (1 - s(i)) * qStart + s(i) * qEnd;
+                self.kinova.model.animate(self.qMatrix(i,:));
+                if(objectUpdateOption == 1)
+                    % move cup with xyzrpy offsets
+                    self.UpdateCup(i,-0.02,0,0.1,0,-pi/2,0);
+                    
+                elseif(objectUpdateOption == 2 || objectUpdateOption == 3)
+                    % move cupWCoffee with xyzrpy offsets
+                    self.UpdateCupWCoffee(i,-0.02,0,0.1,0,-pi/2,0);
+                end
+                drawnow();
+            end            
+            
+        end
         %%
         function UpdateCup(self, i, xOffset, yOffset, zOffset, rollOffset, pitchOffset, yawOffset)
             self.kinova.endEffector = self.kinova.model.fkine(self.qMatrix(i,:)) * ...
@@ -270,11 +308,33 @@ classdef Assignment2Functions <handle
             self.Move(qDropOff,qServe,40,3);
             self.Move(qServe,qStart,60,0);
             
+        end
+        %%
+        function Simulation2(self)
+            qStart = [0,0,0,pi/2,0,pi/2,pi];
+            trStart = self.kinova.model.fkine(qStart);
+            trCup = transl(0.6,0,-0.2) * troty(pi/2);
             
+            trCoffeeMachine1 = transl(0.6,0,-0.1) * troty(pi/2);
+            trCoffeeMachine2 = transl(-0.115,0.68,-0.2) * trotx(-pi/2) * troty(0) * trotz(pi/2);
             
+            trDropOff = transl(0.17,-0.9,-0.22) * trotx(pi/2) * trotz(-pi/2);
+           
+            trEnd = transl(0.3,0,0.6) * trotz(pi/2);
             
-            
-            
+            guess1 = [0,0,0,pi/2,0,pi/2,pi];
+            guess2 = [pi,-pi/2,0,pi,0,pi/2,pi];
+            guess3 = [2*pi,-pi/2,-pi/2,pi/2,pi,0,0];
+            guess4 = [2*pi,0,0,pi/2,2*pi,pi/2,-pi];
+
+            self.Move2(trStart,guess1,20,0);
+            self.Move2(trCup,guess1,30,0);
+            self.Move2(trCoffeeMachine1,guess1,5,1);
+            self.Move2(trCoffeeMachine2,guess2,20,1);
+            self.Move2(trDropOff,guess3,60,2);
+            self.Move2(trEnd,guess4,30,0);
+%             self.Move2(trDropOff,guess3,60,0);
+%             self.Move2(trEnd,guess4,30,0);
         end
         
         
@@ -318,6 +378,54 @@ classdef Assignment2Functions <handle
             end
         end
         
+        %%
+        function RobotArmCollision2(self)
+            q = zeros(1,7);
+            tr = zeros(4,4,self.kinova.model.n+1);
+            tr(:,:,1) = self.kinova.model.base;
+            L = self.kinova.model.links;
+            for i = 1 : self.kinova.model.n
+                tr(:,:,i+1) = tr(:,:,i) * trotz(q(i)+L(i).offset) * transl(0,0,L(i).d) * transl(L(i).a,0,0) * trotx(L(i).alpha);
+            end
+            
+            steps = 70;
+            s=lspb(0,1,steps);
+            q1 = [0,0,0,0,0,0,0,];
+            q2 = [-pi/2,pi/2,0,0,0,0,0];
+            
+            self.kinovaqMatrix = nan(steps,7);
+            result = true(steps,1);
+            
+            for i=1:steps
+                self.kinovaqMatrix(i,:)=(1-s(i))*q1 + s(i)*q2;
+                result(i) = self.IsCollision2(self.kinova,self.kinovaqMatrix(i,:),self.enviro.coffeeMachine.mesh.Faces,self.enviro.coffeeMachine.mesh.Vertices,self.enviro.coffeeMachine.mesh.FaceNormals,false);
+            end
+            
+            for i=1:steps
+                if (result(i) == 1)
+                    firstCollision = i-2; % -6 for offset
+                    poseNum = (firstCollision-2);
+                    steps = round(steps/4);
+                    s=lspb(0,1,steps);
+                    q1 = self.kinovaqMatrix(firstCollision,:);
+                    q2 = self.kinovaqMatrix(poseNum,:);
+                    retreatMatrix = nan(steps,7);
+                    
+                    for j=1:steps
+                        retreatMatrix(j,:) = (1-s(j))*q1 + s(j)*q2;
+                    end
+                    for k=1:steps
+                        self.kinova.model.animate(retreatMatrix(k,:));
+                        drawnow();
+                    end
+                    break
+                else
+                    self.kinova.model.animate(self.kinovaqMatrix(i,:));
+                    drawnow();
+                end
+            end
+            
+        end
         
         %% IsIntersectionPointInsideTriangle
         % Given a point which is known to be on the same plane as the triangle
@@ -393,6 +501,41 @@ classdef Assignment2Functions <handle
             end
         end
         
+        %%
+        %% IsCollision
+        % This is based upon Lab 5 exercises
+        % Given a robot model (robot), and trajectory (i.e. joint state vector) (qMatrix)
+        % and triangle obstacles in the environment (faces,vertex,faceNormals)
+        function result = IsCollision2(self,robot,qMatrix,faces,vertex,faceNormals,returnOnceFound)
+            if nargin < 6
+                returnOnceFound = true;
+            end
+            result = false;
+            
+            
+            for qIndex = 1:size(qMatrix,1)
+                %     q = qMatrix(qIndex,:);
+                
+                % Get the transform of every joint (i.e. start and end of every link)
+                tr = self.GetLinkPoses(qMatrix(qIndex,:), robot);
+                
+                % Go through each link and also each triangle face
+                for i = 1 : size(tr,3)-1
+                    for faceIndex = 1:size(faces,1)
+                        vertOnPlane = vertex(faces(faceIndex,1)',:);
+                        [intersectP,check] = self.LinePlaneIntersection(faceNormals(faceIndex,:),vertOnPlane,tr(1:3,4,i)',tr(1:3,4,i+1)');
+                        if check == 1 && self.IsIntersectionPointInsideTriangle(intersectP,vertex(faces(faceIndex,:)',:))
+                            plot3(intersectP(1),intersectP(2),intersectP(3),'g*');
+                            result = true;
+                            
+                            if returnOnceFound
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+        end
         
         
         %% GetLinkPoses
@@ -522,6 +665,7 @@ classdef Assignment2Functions <handle
                 end
             end
         end
+        
         
         
     end

@@ -3,10 +3,32 @@ clear all
 clc
 clf
 camlight;
-a2=Assignment2FunctionsVideo();
+a2=Assignment2Functions();
+pause();
 a2.Simulation();
 
+%% TRAJ TEST
 
+clear all
+clc
+clf
+camlight;
+a2=Assignment2Functions();
+pause();
+
+% clc
+a2.Simulation2();
+
+%% Collision TEST
+clear all
+clc
+clf
+camlight;
+a2=Assignment2Functions();
+pause();
+%%
+% clc
+a2.RobotArmCollision2();
 
 %% Assignment2Functions
 clear all

@@ -326,12 +326,16 @@ classdef Assignment2Functions <handle
             guess2 = [pi,-pi/2,0,pi,0,pi/2,pi];
             guess3 = [2*pi,-pi/2,-pi/2,pi/2,pi,0,0];
             guess4 = [2*pi,0,0,pi/2,2*pi,pi/2,-pi];
-
+                        
+            display('Begin Coffee Making...');
             self.Move2(trStart,guess1,20,0);
             self.Move2(trCup,guess1,30,0);
+            display('Retrieved Cup');
             self.Move2(trCoffeeMachine1,guess1,5,1);
             self.Move2(trCoffeeMachine2,guess2,20,1);
+            display('Making Coffee...');
             self.Move2(trDropOff,guess3,60,2);
+            display('Coffee Delivered. Enjoy!');
             self.Move2(trEnd,guess4,30,0);
 %             self.Move2(trDropOff,guess3,60,0);
 %             self.Move2(trEnd,guess4,30,0);

@@ -22,7 +22,7 @@ function varargout = Teach_GUIv1(varargin)
 
 % Edit the above text to modify the response to help Teach_GUIv1
 
-% Last Modified by GUIDE v2.5 23-May-2020 13:35:38
+% Last Modified by GUIDE v2.5 05-Jun-2020 17:21:38
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -101,7 +101,10 @@ function q1slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
+
+%When the slider moves, update the values shown on the boxes, taking their
+%poses
+setX=set(handles.xValue,'String',kinovaPos(1,1));   
 setY=set(handles.yValue,'String',kinovaPos(2,1));
 setz=set(handles.zValue,'String',kinovaPos(3,1));
 
@@ -212,8 +215,8 @@ end
 
 
 % --- Executes on slider movement.
-function q5lider_Callback(hObject, eventdata, handles)
-% hObject    handle to q5lider (see GCBO)
+function q5slider_Callback(hObject, eventdata, handles)
+% hObject    handle to q5slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -229,8 +232,8 @@ qNew=set(handles.q5edit,'String',q5);   %display the value of slider into the te
 handles.kinova.UpdateJoint(5,q5);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
-function q5lider_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to q5lider (see GCBO)
+function q5slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q5slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -468,7 +471,8 @@ function xValue_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of xValue as text
 %        str2double(get(hObject,'String')) returns contents of xValue as a double
 xValue=str2num(get(hObject,'String'));
-minxReach=-1.3;
+%setting a max and min
+minxReach=-1.3; 
 maxxReach=1.3;
 if isempty(xValue) % if users forgot to input a number then error pops us 
     errordlg('Missing X value', 'Run Error');
@@ -719,6 +723,7 @@ end
 function run_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to run_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
+
 % handles    structure with handles and user data (see GUIDATA)
 
 
@@ -730,3 +735,31 @@ getZ=str2double(get(handles.zValue,'String'))
 
 inputCoord=[getX,getY,getZ]
 handles.kinova.TeachMove(inputCoord)
+
+
+% --- Executes on button press in reset_btn.
+function reset_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to reset_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(findobj('Tag','q1slider'),'Value',0)
+set(findobj('Tag','q2slider'),'Value',0)
+set(findobj('Tag','q3slider'),'Value',0)
+set(findobj('Tag','q4slider'),'Value',0)
+set(findobj('Tag','q5slider'),'Value',0)
+set(findobj('Tag','q6slider'),'Value',0)
+set(findobj('Tag','q7slider'),'Value',0)
+
+set(findobj('Tag','q1edit'),'String',0)
+set(findobj('Tag','q2edit'),'String',0)
+set(findobj('Tag','q3edit'),'String',0)
+set(findobj('Tag','q4edit'),'String',0)
+set(findobj('Tag','q5edit'),'String',0)
+set(findobj('Tag','q6edit'),'String',0)
+set(findobj('Tag','q7edit'),'String',0)
+
+set(findobj('Tag','xValue'),'String',0)
+set(findobj('Tag','yValue'),'String',0)
+set(findobj('Tag','zValue'),'String',0)
+handles.kinova.ArmReset();
+

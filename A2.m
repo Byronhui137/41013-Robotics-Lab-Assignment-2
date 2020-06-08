@@ -109,6 +109,9 @@ axis equal;
 
 
 %%
+clf
 a2=Assignment2Functions;
 a2.HumanHand();
 camlight;
+%%
+kinova=Kinova();

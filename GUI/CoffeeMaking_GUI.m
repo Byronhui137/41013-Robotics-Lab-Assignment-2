@@ -22,7 +22,7 @@ function varargout = CoffeeMaking_GUIv1(varargin)
 
 % Edit the above text to modify the response to help CoffeeMaking_GUIv1
 
-% Last Modified by GUIDE v2.5 29-May-2020 21:12:07
+% Last Modified by GUIDE v2.5 05-Jun-2020 17:41:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,8 +52,8 @@ function CoffeeMaking_GUIv1_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to CoffeeMaking_GUIv1 (see VARARGIN)
 
-handles.kinova=Assignment2Functions;
-handles.kinova.HumanHand();
+handles.kinova=Assignment2Functions; %puts arm and environment into figure
+handles.kinova.HumanHand(); %puts had into the figure
 camlight;
 % Choose default command line output for CoffeeMaking_GUIv1
 handles.output = hObject;
@@ -81,7 +81,8 @@ function makeCoffee_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.kinova.Simulation();
+handles.kinova.Simulation();    %runs simulation
+handles.kinova.restTrigger=0;   %makeing sure the reset button is not pressed
 
 
 % --- Executes on button press in robotCollision_btn.
@@ -89,7 +90,11 @@ function robotCollision_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to robotCollision_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+handles.kinova.robotcollisionTrigger=get(hObject,'Value'); %setting a button trigger 1 or 0 
+% 1 means button is pressed
+if handles.kinova.robotcollisionTrigger==1
+    handles.kinova.RobotArmCollision(); %then run RobotArmCollision function
+end
 
 % --- Executes on button press in outsideCollision_btn.
 function outsideCollision_btn_Callback(hObject, eventdata, handles)
@@ -103,8 +108,8 @@ function eStop_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to eStop_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.kinova.estopTrigger=get(hObject,'Value');
-if handles.kinova.estopTrigger==1 % button pressed
+handles.kinova.estopTrigger=get(hObject,'Value'); %setting a button trigger 1 or 0 
+if handles.kinova.estopTrigger==1 % button pressed = 1 also stops the simulation
     errordlg('Emergency Stop Activated', 'Emergency');
 end 
 
@@ -124,10 +129,18 @@ function handSlider_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-handles.kinova.handlocation(1,4)=get(hObject,'Value'); %get pos from the slider
-updatePoints=[handles.kinova.handlocation*[handles.kinova.handVerts,ones(handles.kinova.handvCount,1)]']'; %update the verteies and faces
-handles.kinova.handMesh_h.Vertices=updatePoints(:,1:3); %move the hand 
-handles.kinova.handCollisionTrigger = 1;
+handsliderStart=1;
+
+handles.kinova.handlocation(1,4)=get(hObject,'Value') %Value is already set to 2.5 as initial 
+updatePos=[handles.kinova.handlocation*[handles.kinova.handVerts,ones(handles.kinova.handvCount,1)]']'; %update the verteies and faces
+handles.kinova.updateHandPos=updatePos;
+handles.kinova.handMesh_h.Vertices=updatePos(:,1:3); %move the hand 
+if handles.kinova.handlocation(1,4)==1.8 %when slider value is at 1.8 then stop
+     display('bang');
+     pause();
+    
+end
+
 % --- Executes during object creation, after setting all properties.
 function handSlider_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to handSlider (see GCBO)
@@ -138,3 +151,15 @@ function handSlider_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
+
+
+% --- Executes on button press in reset_Btn.
+function reset_Btn_Callback(hObject, eventdata, handles)
+% hObject    handle to reset_Btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.kinova.HandReset();
+handles.kinova.ArmReset();
+handles.kinova.restTrigger=1;
+handles.kinova.estopTrigger=0; 
+set(findobj('Tag','handSlider'),'Value',2.5);

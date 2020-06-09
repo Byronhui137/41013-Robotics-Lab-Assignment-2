@@ -10,6 +10,7 @@ classdef Environment
         cabinate
         cupWCoffee
         dropOff
+        estop
         humanhand
         machineFaceNormals
         machinemesh
@@ -26,6 +27,7 @@ classdef Environment
             self.nineCups=self.NineCups();
             self.cabinate=self.Cabinate();
             self.dropOff = self.DropOff();
+            self.estop=self.Estop();
             
             
             
@@ -102,18 +104,6 @@ classdef Environment
                 ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
         end
         %%
-        %         function cupWCoffee = CupWCoffee(xOffset,yOffset,zOffset)
-        %             [f, v, data] = plyread('cupwithcoffee.ply','tri');
-        %
-        %             cupWCoffee.vCount = size(v,1);
-        %             midPoint = sum(v)/cupWCoffee.vCount;
-        %             cupWCoffee.verts = v - repmat(midPoint, cupWCoffee.vCount, 1);
-        %             vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
-        %             cupWCoffee.mesh = trisurf(f, cupWCoffee.verts(:, 1)+xOffset, cupWCoffee.verts(:, 2)+yOffset, cupWCoffee.verts(:, 3)+zOffset...
-        %                 ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
-        %
-        %         end
-        %%
         function dropOff = DropOff(self)
             [f, v, data] = plyread('dropoff.ply','tri');
             
@@ -135,6 +125,18 @@ classdef Environment
             vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
             beacon.mesh = trisurf(f, beacon.verts(:,1), beacon.verts(:, 2), beacon.verts(:, 3)+1.15...
                 ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
+                end
+                %%
+                function estop = Estop(self)
+            [f, v, data] = plyread('Ebutton.ply','tri');
+            
+            estop.vCount = size(v,1);
+            midPoint = sum(v)/estop.vCount;
+            estop.verts = v - repmat(midPoint, estop.vCount, 1);
+            vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
+            estop.mesh = trisurf(f, estop.verts(:,1), estop.verts(:, 2)-1.3, estop.verts(:, 3)-0.3...
+                ,'FaceVertexCData', vertexColours, 'EdgeColor', 'interp', 'EdgeLighting', 'flat');
+            
         end
     end
 end

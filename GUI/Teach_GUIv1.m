@@ -104,13 +104,13 @@ kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
 
 %When the slider moves, update the values shown on the boxes, taking their
 %poses
-setX=set(handles.xValue,'String',kinovaPos(1,1));   
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q1=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q1edit,'String',q1);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(1,q1);       %Updating the joint q1 with animation
+set(handles.q1edit,'String',q1);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(1,q1);       %Updating the joint q1 with animation
 
 
 
@@ -136,13 +136,13 @@ function q2slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   %
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q2=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q2edit,'String',q2);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(2,q2);       %Updating the joint q1 with animation
+set(handles.q2edit,'String',q2);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(2,q2);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
 function q2slider_CreateFcn(hObject, eventdata, handles)
@@ -165,13 +165,13 @@ function q3slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   %
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q3=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q3edit,'String',q3);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(3,q3);       %Updating the joint q1 with animation
+set(handles.q3edit,'String',q3);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(3,q3);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
 function q3slider_CreateFcn(hObject, eventdata, handles)
@@ -194,13 +194,13 @@ function q4slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   %
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q4=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q4edit,'String',q4);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(4,q4);       %Updating the joint q1 with animation
+set(handles.q4edit,'String',q4);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(4,q4);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
 function q4slider_CreateFcn(hObject, eventdata, handles)
@@ -223,13 +223,13 @@ function q5slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   %
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q5=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q5edit,'String',q5);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(5,q5);       %Updating the joint q1 with animation
+set(handles.q5edit,'String',q5);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(5,q5);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
 function q5slider_CreateFcn(hObject, eventdata, handles)
@@ -252,13 +252,13 @@ function q6slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   %
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q6=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q6edit,'String',q6);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(6,q6);       %Updating the joint q1 with animation
+set(handles.q6edit,'String',q6);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(6,q6);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
 function q6slider_CreateFcn(hObject, eventdata, handles)
@@ -281,13 +281,13 @@ function q7slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 kinovaPos=handles.kinova.GetKinovaPos;              %gives xyz martrix (3x1)
-setX=set(handles.xValue,'String',kinovaPos(1,1));   %
-setY=set(handles.yValue,'String',kinovaPos(2,1));
-setz=set(handles.zValue,'String',kinovaPos(3,1));
+set(handles.xValue,'String',kinovaPos(1,1));   %
+set(handles.yValue,'String',kinovaPos(2,1));
+set(handles.zValue,'String',kinovaPos(3,1));
 
 q7=get(hObject,'Value');                %take the value of the slider
-qNew=set(handles.q7edit,'String',q7);   %display the value of slider into the text box
-handles.kinova.UpdateJoint(7,q7);       %Updating the joint q1 with animation
+set(handles.q7edit,'String',q7);   %display the value of slider into the text box
+handles.kinova.TeachUpdateJoint(7,q7);       %Updating the joint q1 with animation
 
 % --- Executes during object creation, after setting all properties.
 function q7slider_CreateFcn(hObject, eventdata, handles)

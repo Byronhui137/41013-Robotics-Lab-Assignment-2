@@ -233,7 +233,7 @@ classdef Assignment2Functions <handle
         % Kinova robot
         % Used in teach with sliders to get UpdateJoint
         
-        function UpdateJoint(self,jointNumber,link)
+        function TeachUpdateJoint(self,jointNumber,link)
             
             qNew=self.kinova.model.getpos();                                % take current robot joint array q=[0,0,0,0,0,0,0]
             qNew(1,jointNumber)=deg2rad(link);                              % joint number 1-7 make them into rads           

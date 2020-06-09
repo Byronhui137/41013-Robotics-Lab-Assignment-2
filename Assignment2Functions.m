@@ -235,9 +235,9 @@ classdef Assignment2Functions <handle
         
         function TeachUpdateJoint(self,jointNumber,link)
             
-            qNew=self.kinova.model.getpos();                                % take current robot joint array q=[0,0,0,0,0,0,0]
-            qNew(1,jointNumber)=deg2rad(link);                              % joint number 1-7 make them into rads           
-            self.kinova.model.animate(qNew);                                % animate the new joint angle
+            qJoint=self.kinova.model.getpos();                                % take current robot joint array q=[0,0,0,0,0,0,0]
+            qJoint(1,jointNumber)=deg2rad(link);                              % joint number 1-7 make them into rads           
+            self.kinova.model.animate(qJoint);                                % animate the new joint angle
             drawnow();
             
         end
